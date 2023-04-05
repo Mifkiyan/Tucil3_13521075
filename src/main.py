@@ -1,4 +1,5 @@
 from graph import Graph, Location
+from ucs import UCS
 
 def makeGraphFromFile(file):
     fileLines = file.read().splitlines()
@@ -33,4 +34,10 @@ while True:
         break
 
 graph = makeGraphFromFile(file)
-graph.printGraph()
+# graph.printGraph()
+
+UCSalgorithm = UCS(graph, graph.findLocation("Jl. Ganesha 11"), graph.findLocation("JL. Ciungwanara"))
+if UCSalgorithm.search():
+    UCSalgorithm.printAnswer()
+else:
+    print("Path tidak ditemukan")

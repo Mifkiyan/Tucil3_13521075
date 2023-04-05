@@ -17,6 +17,12 @@ class Graph(object):
         for location in self.locationList:
             location.print()
             print()
+
+    def findLocation(self, locationName):
+        for location in self.locationList:
+            if location.name == locationName:
+                return location
+        return None
             
 class Location(object): # Representasi dari sebuah simpul
     def __init__(self, name, latitude, longitude):
