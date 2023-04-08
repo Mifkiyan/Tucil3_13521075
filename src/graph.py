@@ -12,7 +12,7 @@ class Graph(object):
                 if matrix[i][j] != 0 :
                     self.locationList[i].addNeighbour(self.locationList[j])
 
-    def printGraph(self):
+    def printAllNode(self):
         print("Daftar Lokasi: ")
         for location in self.locationList:
             location.print()
