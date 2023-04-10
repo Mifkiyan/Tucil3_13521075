@@ -37,3 +37,6 @@ class Astar:
             else:
                 print(self.final_path[i].name)
         print("Distance: " + str(self.total_cost) + " m")
+    
+    def getPath(self):
+        return self.final_path
