@@ -11,6 +11,7 @@ class Astar:
         self.final_path = []
         self.total_cost = 0
 
+    # Mencari path dari start ke goal dan return True jika path ditemukan dan False jika tidak
     def search(self):
         while self.frontier:
             fn, gn, current, path = heapq.heappop(self.frontier)
@@ -18,7 +19,7 @@ class Astar:
 
             if current == self.goal:
                 self.final_path = path
-                self.total_cost = fn
+                self.total_cost = fn  # or gn
                 return True
 
             for neighbour in current.neighbour:

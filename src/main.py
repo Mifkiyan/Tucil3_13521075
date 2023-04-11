@@ -4,9 +4,9 @@ from astar import Astar
 import folium
 from flask import Flask, render_template
 
-app = Flask(__name__, template_folder="visual")
-
+# Membuat graph dari file
 def makeGraphFromFile(file):
+    # Membaca file dan inisiasi graph kosong
     fileLines = file.read().splitlines()
     numOfPlace = int(fileLines[0])
     locationList = fileLines[1:numOfPlace+1]
@@ -15,6 +15,7 @@ def makeGraphFromFile(file):
 
     graph = Graph(numOfPlace)
 
+    # Membuat objek Location dan menambahkan ke graph
     for i in range(numOfPlace):
         splitString = locationList[i].split(", ")
         nameOfLocation = splitString[0]
@@ -61,25 +62,29 @@ elif Algorithm == "A*" or Algorithm == "a*":
 if not algorithm.search():
     print("\nPath tidak ditemukan")
 
+# Initialize Flask and render map
+app = Flask(__name__, template_folder="visual")
+
 @app.route('/')
 def map():
     return render_template('map.html')
 
 if __name__ == '__main__':
+    # Menampilkan kooridnat awal
     start_coords = [graph.findLocation(start).latitude, graph.findLocation(start).longitude]
     map = folium.Map(location=start_coords, zoom_start=500)
 
-    # Add all markers to the map
+    # Menambahkan marker dan garis hitam antar semua Location
     for location in graph.locationList:
         folium.Marker([location.latitude, location.longitude], popup=location.name).add_to(map)
 
-    # Add a line between the markers
     for location in graph.locationList:
         for neighbour in location.neighbour:
             folium.PolyLine(locations=[[location.latitude, location.longitude], [neighbour.latitude, neighbour.longitude]], color='black').add_to(map)
 
     path = algorithm.getPath()
 
+    # Menambahkan garis merah antar Location yang ada di path
     if path != None:
         print()
         algorithm.printAnswer()

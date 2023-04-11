@@ -1,7 +1,6 @@
 import math
 
-from graph import Location
-
+# Menghitung jarak antara dua titik menggunakan rumus Haversine dalam satuan meter
 def haversine_distance(node1, node2):
     R = 6371000 # Earth's radius in meters
     lat1_rad = math.radians(node1.latitude)
@@ -14,8 +13,3 @@ def haversine_distance(node1, node2):
     d = R * c
     
     return round(d, 4)
-
-# Test Sample
-# a = Location("Jl. Ganesha 11", -6.893213, 107.610664)
-# b = Location("Jl. Ir. H. Juanda No.81", -6.893730, 107.612948)
-# print(haversine_distance(a, b), "meters")

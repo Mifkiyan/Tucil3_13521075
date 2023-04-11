@@ -11,6 +11,7 @@ class UCS:
         self.final_path = []
         self.total_cost = 0
 
+    # Mencari path dari start ke goal dan return True jika path ditemukan dan False jika tidak
     def search(self):
         while self.frontier:
             current_cost, current, path = heapq.heappop(self.frontier)
