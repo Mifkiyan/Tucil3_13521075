@@ -26,7 +26,7 @@ def makeGraphFromFile(file, type):
         yOfNode = float(splitString[2])
         newNode = Node(nameOfNode, xOfNode, yOfNode)
         graph.addNode(newNode)
-        adjacencyMatrix[i] = [int(x) for x in readMatrix[i].split(" ")]
+        adjacencyMatrix[i] = [float(x) for x in readMatrix[i].split(" ")]
 
     graph.addNodeNeighbours(adjacencyMatrix)
 
@@ -63,7 +63,7 @@ while inputType != "Biasa" and inputType != "Map" and inputType != "biasa" and i
 while True:
     filename = input("Masukkan nama file: ")
     try:
-        if inputType == "Biasa" or inputType == "Biasa":
+        if inputType == "Biasa" or inputType == "biasa":
             file = open("test/non-map/" + filename + ".txt")
         elif inputType == "Map" or inputType == "map":
             file = open("test/map/" + filename + ".txt")
@@ -72,7 +72,7 @@ while True:
     else:
         break
 
-if inputType == "Biasa" or inputType == "Biasa":
+if inputType == "Biasa" or inputType == "biasa":
     graph = makeGraphFromFile(file, "normal")
 elif inputType == "Map" or inputType == "map":
     graph = makeGraphFromFile(file, "map")
@@ -100,7 +100,7 @@ elif Algorithm == "A*" or Algorithm == "a*":
 
 
 # Menampilkan hasil pencarian untuk graf biasa
-if inputType == "Biasa" or inputType == "Biasa":
+if inputType == "Biasa" or inputType == "biasa":
     if algorithm.search():
         algorithm.printAnswer()
         visualizeGraph(graph, algorithm.getPath())
@@ -125,7 +125,11 @@ elif inputType == "Map" or inputType == "map":
 
     # Menambahkan marker dan garis hitam antar semua Location
     for location in graph.nodeList:
-        folium.Marker([location.x, location.y], popup=location.name).add_to(map)
+        folium.Marker(location=[location.x, location.y], popup=location.name, icon=folium.Icon(color='blue')).add_to(map)
+    
+    # Membedakan warna marker titik awal dan titik akhir
+    folium.Marker(start_coords, popup=graph.findNode(start).name, icon=folium.Icon(color='green')).add_to(map)
+    folium.Marker([graph.findNode(end).x, graph.findNode(end).y], popup=graph.findNode(end).name, icon=folium.Icon(color='orange')).add_to(map)
 
     for location in graph.nodeList:
         for neighbour in location.neighbour:

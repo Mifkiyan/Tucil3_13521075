@@ -32,6 +32,10 @@ class Node(object):
         self.y = y # Longitude untuk map
         self.neighbour = [] # neighbour berisi objek Node dan jaraknya
     
+    # Untuk sorting apabila terdapat cost yang memiliki nilai yang sama
+    def __ls__(self, other):
+        return self.name < other.name
+    
     def addNeighbour(self, node, distance):
         self.neighbour.append([node, distance])
 
