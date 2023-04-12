@@ -1,5 +1,5 @@
 import heapq
-import haversine
+import distance
 
 class UCS:
     def __init__(self, graph, start, goal):
@@ -10,7 +10,7 @@ class UCS:
         self.explored = []
         self.final_path = []
         self.total_cost = 0
-
+    
     # Mencari path dari start ke goal dan return True jika path ditemukan dan False jika tidak
     def search(self):
         while self.frontier:
@@ -22,9 +22,10 @@ class UCS:
                 self.total_cost = current_cost
                 return True
 
-            for neighbour in current.neighbour:
+            for i in range(len(current.neighbour)):
+                neighbour = current.neighbour[i][0]
                 if neighbour not in self.explored:
-                    new_cost = current_cost + haversine.haversine_distance(current, neighbour)
+                    new_cost = current_cost + current.neighbour[i][1]
                     heapq.heappush(self.frontier, (new_cost, neighbour, path + [neighbour]))
 
         return False
@@ -36,7 +37,10 @@ class UCS:
                 print(self.final_path[i].name, end=" -> ")
             else:
                 print(self.final_path[i].name)
-        print("Distance: " + str(self.total_cost) + " m")
+        if self.graph.type == "map":
+            print("Distance: " + str(self.total_cost) + " m")
+        elif self.graph.type == "matriks":
+            print("Distance: " + str(self.total_cost))
 
     def getPath(self):
         return self.final_path

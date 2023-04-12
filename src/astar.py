@@ -1,5 +1,5 @@
 import heapq
-import haversine
+import distance
 
 class Astar:
     def __init__(self, graph, start, goal):
@@ -21,12 +21,17 @@ class Astar:
                 self.final_path = path
                 self.total_cost = fn  # or gn
                 return True
-
-            for neighbour in current.neighbour:
+            
+            for i in range(len(current.neighbour)):
+                neighbour = current.neighbour[i][0]
                 if neighbour not in self.explored:
-                    new_gn = gn + haversine.haversine_distance(current, neighbour)
-                    new_fn = new_gn + haversine.haversine_distance(neighbour, self.goal)
-                    heapq.heappush(self.frontier, (new_fn, new_gn, neighbour, path + [neighbour]))
+                    new_gn = gn + current.neighbour[i][1]
+                    if self.graph.type == "map":
+                        new_fn = new_gn + distance.haversine(neighbour, self.goal)
+                        heapq.heappush(self.frontier, (new_fn, new_gn, neighbour, path + [neighbour]))
+                    elif self.graph.type == "matriks":
+                        new_fn = new_gn + distance.euclidean(neighbour, self.goal)
+                        heapq.heappush(self.frontier, (new_fn, new_gn, neighbour, path + [neighbour]))
 
         return False
     
@@ -37,7 +42,10 @@ class Astar:
                 print(self.final_path[i].name, end=" -> ")
             else:
                 print(self.final_path[i].name)
-        print("Distance: " + str(self.total_cost) + " m")
-    
+        if self.graph.type == "map":
+            print("Distance: " + str(self.total_cost) + " m")
+        elif self.graph.type == "matriks":
+            print("Distance: " + str(self.total_cost))
+
     def getPath(self):
         return self.final_path

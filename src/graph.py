@@ -1,46 +1,51 @@
 class Graph(object):
-    def __init__(self, numOfLocation):
-        self.numOfLocation = numOfLocation
-        self.locationList = []
+    def __init__(self, type, numOfNode):
+        self.type = type
+        self.numOfNode = numOfNode
+        self.nodeList = []
 
-    def addLocation(self, location):
-        self.locationList.append(location)
-
-    def addNeighbours(self, matrix):
-        for i in range(self.numOfLocation):
-            for j in range(self.numOfLocation):
-                if matrix[i][j] != 0 :
-                    self.locationList[i].addNeighbour(self.locationList[j])
+    def addNode(self, Node):
+        self.nodeList.append(Node)
+    
+    def addNodeNeighbours(self, matrix):
+        for i in range(self.numOfNode):
+            for j in range(self.numOfNode):
+                if matrix[i][j] != 0:
+                    self.nodeList[i].addNeighbour(self.nodeList[j], matrix[i][j])
 
     def printAllNode(self):
-        print("Daftar Lokasi: ")
-        for location in self.locationList:
-            location.print()
+        print("Daftar Node: ")
+        for node in self.nodeList:
+            node.print()
             print()
 
-    def findLocation(self, locationName):
-        for location in self.locationList:
-            if location.name == locationName:
-                return location
+    def findNode(self, nodeName):
+        for node in self.nodeList:
+            if node.name == nodeName:
+                return node
         return None
-            
-class Location(object): # Representasi dari sebuah simpul
-    def __init__(self, name, latitude, longitude):
+        
+class Node(object): # Untuk hanya matriks berbobot
+    def __init__(self, name, x, y):
         self.name = name
-        self.latitude = latitude
-        self.longitude = longitude
-        self.neighbour = []
+        self.x = x # Latitude untuk map
+        self.y = y # Longitude untuk map
+        self.neighbour = [] # neighbour berisi objek Node dan jaraknya
     
-    def addNeighbour(self, location):
-        self.neighbour.append(location)
+    def addNeighbour(self, node, distance):
+        self.neighbour.append([node, distance])
 
     def print(self):
-        print("Nama Lokasi:", self.name)
-        print("Latitude:", self.latitude)
-        print("Longitude:", self.longitude)
+        print("Nama Node:", self.name)
+        print("Koordinat:", self.x, self.y)
         print("Tetangga: ", end="")
         for i in range(len(self.neighbour)):
             if i != len(self.neighbour) - 1:
-                print(self.neighbour[i].name, end=", ")
+                print(self.neighbour[i][0].name + " (" + str(self.neighbour[i][1]) + ")", end=", ")
             else:
-                print(self.neighbour[i].name)
+                print(self.neighbour[i][0].name + " (" + str(self.neighbour[i][1]) + ")")
+
+    def getDistanceNeighbour(self, neighbour):
+        for i in range(len(self.neighbour)):
+            if self.neighbour[i][0] == neighbour:
+                return self.neighbour[i][1]
