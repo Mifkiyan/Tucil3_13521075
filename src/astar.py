@@ -29,12 +29,13 @@ class Astar:
                     if self.graph.type == "map":
                         new_fn = new_gn + distance.haversine(neighbour, self.goal)
                         heapq.heappush(self.frontier, (new_fn, new_gn, neighbour, path + [neighbour]))
-                    elif self.graph.type == "matriks":
+                    elif self.graph.type == "normal":
                         new_fn = new_gn + distance.euclidean(neighbour, self.goal)
                         heapq.heappush(self.frontier, (new_fn, new_gn, neighbour, path + [neighbour]))
 
         return False
     
+    # Mencetak path dan jaraknya
     def printAnswer(self):
         print("Path: ", end="")
         for i in range(len(self.final_path)):
@@ -43,9 +44,10 @@ class Astar:
             else:
                 print(self.final_path[i].name)
         if self.graph.type == "map":
-            print("Distance: " + str(self.total_cost) + " m")
-        elif self.graph.type == "matriks":
+            print("Distance: " + str(self.total_cost) + " m") # Penambahan satuan meter
+        elif self.graph.type == "normal":
             print("Distance: " + str(self.total_cost))
 
+    # Mengembalikan path akhir (mungkin kosong)
     def getPath(self):
         return self.final_path

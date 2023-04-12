@@ -1,6 +1,6 @@
 class Graph(object):
     def __init__(self, type, numOfNode):
-        self.type = type
+        self.type = type # Tipe tergantung antara untuk map atau graph biasa
         self.numOfNode = numOfNode
         self.nodeList = []
 
@@ -25,7 +25,7 @@ class Graph(object):
                 return node
         return None
         
-class Node(object): # Untuk hanya matriks berbobot
+class Node(object):
     def __init__(self, name, x, y):
         self.name = name
         self.x = x # Latitude untuk map

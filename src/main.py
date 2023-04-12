@@ -40,12 +40,10 @@ def visualizeGraph(graph, path): # Hanya untuk graf biasa
             G.add_edge(node.name, neighbour[0].name, weight=neighbour[1], color='black')
         
     
-    # Warna hitam untuk jalur yang tidak dipilih dan merah untuk jalur yang dipilih
+    # Path yang dilewati akan berwarna merah
     for i in range(len(path) - 1):
         G.remove_edge(path[i].name, path[i+1].name)
         G.add_edge(path[i].name, path[i+1].name, weight=path[i].getDistanceNeighbour(path[i+1]), color='red')
-    # Warna biru untuk node yang tidak ada di jalur dan merah untuk node yang ada di jalur
-    # node_colors = ['red' if node in path else 'blue' for node in G.nodes()]
 
     pos = nx.get_node_attributes(G, 'pos')
     edge_colors = nx.get_edge_attributes(G, 'color').values()
@@ -65,8 +63,8 @@ while inputType != "Biasa" and inputType != "Map" and inputType != "biasa" and i
 while True:
     filename = input("Masukkan nama file: ")
     try:
-        if inputType == "Matriks" or inputType == "matriks":
-            file = open("test/matriks/" + filename + ".txt")
+        if inputType == "Biasa" or inputType == "Biasa":
+            file = open("test/non-map/" + filename + ".txt")
         elif inputType == "Map" or inputType == "map":
             file = open("test/map/" + filename + ".txt")
     except FileNotFoundError:
@@ -74,13 +72,14 @@ while True:
     else:
         break
 
-if inputType == "Matriks" or inputType == "matriks":
-    graph = makeGraphFromFile(file, "matriks")
+if inputType == "Biasa" or inputType == "Biasa":
+    graph = makeGraphFromFile(file, "normal")
 elif inputType == "Map" or inputType == "map":
     graph = makeGraphFromFile(file, "map")
 
-graph.printAllNode()
 
+# Menampilkan semua node yang ada di graph dan memasukkan nama titik awal dan akhir
+graph.printAllNode()
 start = input("Masukkan nama titik awal: ")
 end = input("Masukkan nama titik akhir: ")
 while graph.findNode(start) == None or graph.findNode(end) == None:
@@ -88,6 +87,7 @@ while graph.findNode(start) == None or graph.findNode(end) == None:
     start = input("Masukkan nama titik awal: ")
     end = input("Masukkan nama titik akhir: ")
 
+# Meminta algoritma yang ingin digunakan
 Algorithm = input("Masukkan algoritma yang ingin digunakan (UCS/A*): ")
 while Algorithm != "UCS" and Algorithm != "A*" and Algorithm != "ucs" and Algorithm != "a*":
     print("Masukan salah, coba lagi\n")
@@ -98,13 +98,16 @@ if Algorithm == "UCS" or Algorithm == "ucs":
 elif Algorithm == "A*" or Algorithm == "a*":
     algorithm = Astar(graph, graph.findNode(start), graph.findNode(end))
 
-if inputType == "Matriks" or inputType == "matriks":
+
+# Menampilkan hasil pencarian untuk graf biasa
+if inputType == "Biasa" or inputType == "Biasa":
     if algorithm.search():
         algorithm.printAnswer()
         visualizeGraph(graph, algorithm.getPath())
     else:
         print("Path tidak ditemukan")
 
+# Menampilkan hasil pencarian untuk graf map
 elif inputType == "Map" or inputType == "map":
     # Initialize Flask and render map
     app = Flask(__name__, template_folder="visual")
@@ -116,7 +119,7 @@ elif inputType == "Map" or inputType == "map":
     if not algorithm.search():
         print("\nPath tidak ditemukan")
 
-    # Menampilkan kooridnat awal
+    # Menampilkan koordinat awal
     start_coords = [graph.findNode(start).x, graph.findNode(start).y]
     map = folium.Map(location=start_coords, zoom_start=500)
 
