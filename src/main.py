@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import folium
 from flask import Flask, render_template
+import os
 
 # Membuat graph dari matriks berbobot
 def makeGraphFromFile(file, type):
@@ -136,6 +137,8 @@ elif inputType == "Map" or inputType == "map":
         for i in range(len(path)-1):
             folium.PolyLine(locations=[[path[i].x, path[i].y], [path[i+1].x, path[i+1].y]], color='red').add_to(map)
 
+    if not os.path.exists('src/visual'):
+        os.makedirs('src/visual')
     map.save('src/visual/map.html')
 
     if path == None:
@@ -152,3 +155,5 @@ elif inputType == "Map" or inputType == "map":
     
     if ans == "Y" or ans == "y":
         app.run(debug=False)
+    
+    os.remove('src/visual/map.html')
